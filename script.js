@@ -126,3 +126,14 @@ const gameController = (() => {
     resetGame,
   };
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+  const cells = document.querySelectorAll(".cell");
+  cells.forEach((cell, index) => {
+    cell.addEventListener("click", () => {
+      gameController.playTurn(index);
+      const board = gameBoard.getBoard();
+      cell.textContent = board[index];
+    });
+  });
+});
