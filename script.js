@@ -5,15 +5,13 @@ const createPlayer = (name, symbol) => {
 
 // gameBoard Module (IIFE)
 const gameBoard = (() => {
-  // Array to store the game state
   const board = ["", "", "", "", "", "", "", "", ""];
 
   // Method to get the current board state
   const getBoard = () => board;
 
-  // Update the cell (9 cells)
+  // Method to update the board's cell
   const updateCell = (index, symbol) => {
-    // if the index is empty then update to that index
     if (board[index] === "") {
       board[index] = symbol;
       return true;
@@ -28,7 +26,6 @@ const gameBoard = (() => {
     }
   };
 
-  // Expose the methods we need
   return {
     getBoard,
     updateCell,
@@ -45,27 +42,21 @@ const gameController = (() => {
 
   // Winning combinations (rows, columns, diagonals)
   const winningCombinations = [
-    [0, 1, 2], // Top row
-    [3, 4, 5], // Middle row
-    [6, 7, 8], // Bottom row
-    [0, 3, 6], // Left column
-    [1, 4, 7], // Middle column
-    [2, 5, 8], // Right column
-    [0, 4, 8], // Diagonal from top-left to bottom-right
-    [2, 4, 6], // Diagonal from top-right to bottom-left
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
   ];
 
-  // Start the game
+  // Start the game with the order of the player
   const startGame = (player1, player2) => {
     players = [player1, player2];
     currentPlayer = players[0];
-    gameOver = false; // Game just started, so it's not over
-
-    // Logging to verify in the console
-    console.log("Game has started!");
-    console.log(`Player 1: ${players[0].name}, Symbol: ${players[0].symbol}`);
-    console.log(`Player 2: ${players[1].name}, Symbol: ${players[1].symbol}`);
-    console.log(`Current Player: ${currentPlayer.name}`);
+    gameOver = false;
   };
 
   // Play a turn
@@ -75,25 +66,19 @@ const gameController = (() => {
       return;
     }
 
-    // Attempt to update the board
+    // Update the board with the play of the current player
     const moveSuccessful = gameBoard.updateCell(index, currentPlayer.symbol);
     if (!moveSuccessful) {
       console.log("Cell is already taken. Choose another cell.");
       return;
     }
-
-    // Log the move
-    console.log(`Player ${currentPlayer.name} placed ${currentPlayer.symbol} at index ${index}`);
-
-    // Check for a winner
+    // Check that the current winner is win or not
     checkWinner();
 
-    // Check for a draw if no winner
     if (!gameOver) {
       checkDraw();
     }
 
-    // Switch player if game is not over
     if (!gameOver) {
       switchPlayer();
     }
@@ -102,6 +87,7 @@ const gameController = (() => {
   // Check if the current player has won
   const checkWinner = () => {
     const board = gameBoard.getBoard();
+    // Loop all possible combination
     for (const combination of winningCombinations) {
       const [a, b, c] = combination;
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
@@ -140,5 +126,3 @@ const gameController = (() => {
     resetGame,
   };
 })();
-
-
